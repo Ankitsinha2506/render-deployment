@@ -1,0 +1,21 @@
+# Node.js dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# Firebase service account file
+inventory-management-bb001-firebase-adminsdk-fbsvc-b47350995e.json
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS/system files
+.DS_Store
+Thumbs.db
+
+# IDE/project files
+.vscode/
+.idea/
