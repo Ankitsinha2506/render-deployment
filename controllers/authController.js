@@ -1,14 +1,7 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const generateToken = require('../utils/generateToken');
-const admin = require('firebase-admin');
 
-// Firebase setup
-const serviceAccount = require('../inventory-management-bb001-firebase-adminsdk-fbsvc-b47350995e.json'); // You need to download this from Firebase
-
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-});
 
 exports.register = async (req, res) => {
     const { name, email, password } = req.body;
@@ -28,23 +21,4 @@ exports.login = async (req, res) => {
         return res.status(401).json({ message: 'Invalid credentials' });
 
     res.json({ token: generateToken(user._id) });
-};
-
-exports.googleLogin = async (req, res) => {
-    const { idToken } = req.body;
-
-    try {
-        const decodedToken = await admin.auth().verifyIdToken(idToken);
-        const { email, name } = decodedToken;
-
-        let user = await User.findOne({ email });
-
-        if (!user) {
-            user = await User.create({ email, name, isGoogleUser: true });
-        }
-
-        res.json({ token: generateToken(user._id) });
-    } catch (err) {
-        res.status(401).json({ message: 'Google Auth failed' });
-    }
 };
