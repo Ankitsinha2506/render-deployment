@@ -30,21 +30,21 @@ exports.login = async (req, res) => {
     res.json({ token: generateToken(user._id) });
 };
 
-// exports.googleLogin = async (req, res) => {
-//     const { idToken } = req.body;
+exports.googleLogin = async (req, res) => {
+    const { idToken } = req.body;
 
-//     try {
-//         const decodedToken = await admin.auth().verifyIdToken(idToken);
-//         const { email, name } = decodedToken;
+    try {
+        const decodedToken = await admin.auth().verifyIdToken(idToken);
+        const { email, name } = decodedToken;
 
-//         let user = await User.findOne({ email });
+        let user = await User.findOne({ email });
 
-//         if (!user) {
-//             user = await User.create({ email, name, isGoogleUser: true });
-//         }
+        if (!user) {
+            user = await User.create({ email, name, isGoogleUser: true });
+        }
 
-//         res.json({ token: generateToken(user._id) });
-//     } catch (err) {
-//         res.status(401).json({ message: 'Google Auth failed' });
-//     }
-// };
+        res.json({ token: generateToken(user._id) });
+    } catch (err) {
+        res.status(401).json({ message: 'Google Auth failed' });
+    }
+};
